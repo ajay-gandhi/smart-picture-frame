@@ -13,7 +13,7 @@ const writeFile = async (filename, data) => {
   const tempPath = path.join(__dirname, "temp", filename);
   const permPath = path.join(config.filesDir, filename);
 
-  fs.writeFile(tempPath, outputBuffer, (err) => {
+  fs.writeFile(tempPath, data, (err) => {
     exec("mv " + tempPath + " " + permPath, (err, stdout, stderr) => {
       if (err) {
         console.log("Error moving to volume");
@@ -46,7 +46,7 @@ app.post("/upload", (req, res) => {
         format: "JPEG",
         quality: 1,
       }).then((output) => {
-        writeFile(newFilename, outputBuffer);
+        writeFile(newFilename, output);
       });
     } else {
       writeFile(newFilename);
