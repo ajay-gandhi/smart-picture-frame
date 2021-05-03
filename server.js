@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const express = require("express");
+const exec = require("child_process").exec;
 const ip = require("ip");
 const fileUpload = require("express-fileupload");
 const config = require("./config.json");
@@ -22,7 +23,16 @@ app.post("/upload", (req, res) => {
   Object.keys(req.files).forEach((fileKey) => {
     const file = req.files[fileKey];
     const filename = `${file.md5}${path.extname(file.name)}`;
-    fs.writeFileSync(path.join(config.filesDir, filename), file.data);
+    const tempPath = path.join(__dirname, "temp", filename);
+    const permPath = path.join(config.filesDir, filename);
+    fs.writeFileSync(tempPath, file.data);
+    exec("mv " + tempPath + " " + permPath, (err, stdout, stderr) => {
+      if (err) {
+        console.log("Error moving to volume");
+        console.log(err);
+        console.log(stderr);
+      }
+    });
   });
   res.send({ success: true });
 });
