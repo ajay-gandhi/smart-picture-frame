@@ -12,6 +12,7 @@ app.use(fileUpload({
   limits: { fileSize: 50 * 1024 * 1024 },
 }));
 app.use(express.static("public"));
+app.use("/file", express.static(config.filesDir));
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -24,6 +25,12 @@ app.post("/upload", (req, res) => {
     fs.writeFileSync(path.join(config.filesDir, filename), file.data);
   });
   res.send({ success: true });
+});
+
+app.get("/list", (req, res) => {
+  fs.readdir(config.filesDir, (err, files) => {
+    res.send(files);
+  });
 });
 
 app.listen(port, () => {
