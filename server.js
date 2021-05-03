@@ -15,6 +15,7 @@ const writeFile = async (filename, data) => {
 
   fs.writeFile(tempPath, data, (err) => {
     exec("mv " + tempPath + " " + permPath, (err, stdout, stderr) => {
+      fs.rm(tempPath);
       if (err) {
         console.log("Error moving to volume");
         console.log(err);
@@ -46,7 +47,7 @@ app.post("/upload", (req, res) => {
         format: "JPEG",
         quality: 1,
       }).then((output) => {
-        writeFile(newFilename, output);
+        writeFile(`${file.md5}.jpg`, output);
       });
     } else {
       writeFile(newFilename);
