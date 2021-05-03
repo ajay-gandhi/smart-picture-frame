@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const express = require("express");
+const ip = require("ip");
 const fileUpload = require("express-fileupload");
 const config = require("./config.json");
 
@@ -26,5 +27,5 @@ app.post("/upload", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log("Example app listening at http://" + ip.address() + ":" + port);
 });

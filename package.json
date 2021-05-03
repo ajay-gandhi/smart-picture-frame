@@ -1,1 +1,24 @@
-{}
+{
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.1",
+    "ip": "^1.1.5"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "smart-picture-frame",
+  "description": "1. Install nodejs 2. Install packages: `npm install` 3. Run server: `[sudo] node server.js`",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajay-gandhi/smart-picture-frame.git"
+  },
+  "author": "Ajay Gandhi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ajay-gandhi/smart-picture-frame/issues"
+  },
+  "homepage": "https://github.com/ajay-gandhi/smart-picture-frame#readme"
+}
