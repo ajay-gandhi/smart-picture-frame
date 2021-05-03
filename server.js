@@ -9,22 +9,6 @@ const config = require("./config.json");
 const app = express();
 const port = 8080;
 
-const writeFile = async (filename, data) => {
-  const tempPath = path.join(__dirname, "temp", filename);
-  const permPath = path.join(config.filesDir, filename);
-
-  fs.writeFile(tempPath, data, (err) => {
-    exec("mv " + tempPath + " " + permPath, (err, stdout, stderr) => {
-      fs.rm(tempPath);
-      if (err) {
-        console.log("Error moving to volume");
-        console.log(err);
-        console.log(stderr);
-      }
-    });
-  });
-};
-
 app.use(fileUpload({
   limits: { fileSize: 50 * 1024 * 1024 },
 }));
@@ -39,7 +23,6 @@ app.post("/upload", (req, res) => {
   Object.keys(req.files).forEach((fileKey) => {
     const file = req.files[fileKey];
     const ext = path.extname(file.name);
-    const newFilename = `${file.md5}${ext}`;
 
     if (ext.toLowerCase() === ".heic") {
       convert({
@@ -47,10 +30,15 @@ app.post("/upload", (req, res) => {
         format: "JPEG",
         quality: 1,
       }).then((output) => {
-        writeFile(`${file.md5}.jpg`, output);
+        const path =
+        fs.writeFile(path.join(config.filesDir, `${file.md5}.jpg`), output, (err) => {
+          console.log(err);
+        });
       });
     } else {
-      writeFile(newFilename);
+      fs.writeFile(path.join(config.filesDir, `${file.md5}${ext}`), file.data, (err) => {
+        console.log(err);
+      });
     }
   });
   res.send({ success: true });
